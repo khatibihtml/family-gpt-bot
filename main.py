@@ -32,4 +32,4 @@ app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
 if __name__=="__main__":
     print("🤖 ربات در حال اجراست...")
-    app.run_polling()
+    app.run_polling(stop_signals=None)

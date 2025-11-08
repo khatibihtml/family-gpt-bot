@@ -10,16 +10,18 @@ TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("سلام! من ربات ChatGPT هستم از OpenRouter 🌍 بپرس تا جواب بدم!")
+    await update.message.reply_text("سلام! من ربات ChatGPT از OpenRouter هستم 🌍 بپرس تا جواب بدم!")
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_message = update.message.text
+
     headers = {
         "Authorization": f"Bearer {OPENROUTER_API_KEY}",
         "Content-Type": "application/json",
     }
+
     data = {
-        "model": "gpt-4o-mini",  # مدل رایگان و سریع
+        "model": "gpt-4o-mini",
         "messages": [
             {"role": "system", "content": "تو یک دستیار فارسی‌زبان مودب و باهوش هستی."},
             {"role": "user", "content": user_message},
@@ -32,12 +34,12 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reply = response.json()["choices"][0]["message"]["content"]
         await update.message.reply_text(reply)
     else:
-        await update.message.reply_text("❌ خطا در دریافت پاسخ از سرور OpenRouter.")
+        await update.message.reply_text(f"⚠ خطا در ارتباط با OpenRouter ({response.status_code})")
 
 app = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
 app.add_handler(CommandHandler("start", start))
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
 if _name_ == "_main_":
-    print("🤖 ربات OpenRouter در حال اجراست...")
+    print("🤖 ربات با OpenRouter در حال اجراست...")
     app.run_polling()

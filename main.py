@@ -10,7 +10,7 @@ TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("سلام! من ربات ChatGPT از OpenRouter هستم 🌍 بپرس تا جواب بدم!")
+    await update.message.reply_text("سلام من یک هوش مصنوعی هستم . چه کمکی میتونم به شما بکنم !")
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_message = update.message.text

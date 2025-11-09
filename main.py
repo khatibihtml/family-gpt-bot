@@ -40,6 +40,15 @@ app = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
 app.add_handler(CommandHandler("start", start))
 app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
+import os
+
 if __name__ == "__main__":
-    print("🤖 ربات با OpenRouter در حال اجراست...")
-    app.run_polling()
+    port = int(os.environ.get("PORT", 8443))
+    print("🌍 Webhook در حال اجراست...")
+
+    app.run_webhook(
+        listen="0.0.0.0",
+        port=port,
+        url_path=TELEGRAM_TOKEN,
+        webhook_url=f"https://{os.environ.get('RENDER_EXTERNAL_HOSTNAME')}/{TELEGRAM_TOKEN}"
+    )

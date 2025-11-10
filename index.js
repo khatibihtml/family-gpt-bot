@@ -7,7 +7,7 @@ app.use(express.json());
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 const BASE_URL = `https://api.telegram.org/bot${TELEGRAM_TOKEN}`;
-const WEBHOOK_URL = `https://${process.env.RENDER_EXTERNAL_URL}/${TELEGRAM_TOKEN}`;
+const WEBHOOK_URL = `https://${process.env.RENDER_EXTERNAL_URL}/`;
 
 app.post(`/${TELEGRAM_TOKEN}`, async (req, res) => {
   const message = req.body.message;

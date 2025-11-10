@@ -24,7 +24,7 @@ const setHook = await bot.setWebHook(webhookUrl);
 console.log("🌍 Webhook:", webhookUrl, " -> ", setHook);
 
 // مسیر دریافت آپدیت‌ها از تلگرام
-app.post(/${TELEGRAM_TOKEN}, (req, res) => {
+app.post(`/${TELEGRAM_TOKEN}`, (req, res) => {
   bot.processUpdate(req.body);
   res.sendStatus(200);
 });

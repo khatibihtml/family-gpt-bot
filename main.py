@@ -71,3 +71,18 @@ bot.on("message", async (msg) => {
     console.error("on message error:", err);
   }
 });
+{
+  "name": "telegram-ai-bot",
+  "version": "1.0.1",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2",
+    "node-fetch": "^3.3.2",
+    "node-telegram-bot-api": "^0.61.0"
+  }
+}

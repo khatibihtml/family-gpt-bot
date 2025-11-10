@@ -1,28 +1,28 @@
 import express from "express";
 import fetch from "node-fetch";
-import TelegramBot from "node-telegram-bot-api";
 
 const app = express();
 app.use(express.json());
 
-// ---------------------- تنظیمات اصلی ----------------------
+// 🧩 توکن ربات و URLها
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 const BASE_URL = "https://api.telegram.org";
 const WEBHOOK_URL = "https://falkon-itsh.onrender.com";
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
-// ساخت ربات تلگرام
-const bot = new TelegramBot(TELEGRAM_TOKEN, { webHook: true });
-bot.setWebHook(`${WEBHOOK_URL}/bot${TELEGRAM_TOKEN}`);
+// 📩 مسیر دریافت پیام از تلگرام
+app.post(`/bot${TELEGRAM_TOKEN}`, async (req, res) => {
+  console.log("📥 Webhook called:", req.body); // برای بررسی لاگ
+  const message = req.body.message;
 
-// ---------------------- واکنش به پیام ----------------------
-bot.on("message", async (msg) => {
-  console.log("📩 Message received:", msg.text);
+  if (!message || !message.text) {
+    return res.sendStatus(200);
+  }
 
-  const userText = msg.text || "";
-  bot.sendMessage(msg.chat.id, "✅ پیام‌ات رسید! در حال فکر کردن...");
+  const userText = message.text;
 
   try {
+    // ارسال پیام به OpenRouter (مدل GPT)
     const aiResponse = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -36,23 +36,27 @@ bot.on("message", async (msg) => {
     });
 
     const data = await aiResponse.json();
-    const aiReply = data.choices?.[0]?.message?.content || "❌ پاسخی از هوش مصنوعی دریافت نشد.";
-    bot.sendMessage(msg.chat.id, aiReply);
-  } catch (err) {
-    console.error("AI error:", err);
-    bot.sendMessage(msg.chat.id, "🚫 خطا در پاسخ هوش مصنوعی.");
-  }
-});
+    const aiReply = data.choices?.[0]?.message?.content || "پاسخی دریافت نشد 😔";
 
-// ---------------------- سرور اکسپرس ----------------------
-app.post(`/bot${TELEGRAM_TOKEN}`, (req, res) => {
-  console.log("📥 Telegram webhook called:", req.body);
-  bot.processUpdate(req.body);
+    // ارسال پاسخ به کاربر
+    await fetch(`${BASE_URL}/bot${TELEGRAM_TOKEN}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: message.chat.id,
+        text: aiReply,
+      }),
+    });
+
+  } catch (err) {
+    console.error("❌ Error:", err);
+  }
+
   res.sendStatus(200);
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, async () => {
+// 🚀 راه‌اندازی سرور و تنظیم وبهوک
+app.listen(8443, async () => {
   console.log("🚀 Server running on port 8443");
 
   try {

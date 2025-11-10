@@ -15,18 +15,39 @@ app.post(`/bot${TELEGRAM_TOKEN}`, async (req, res) => {
 
   console.log("📩 پیام از تلگرام:", msg.text);
 
-  // پاسخ ساده تستی برای اطمینان
-  const replyText = "✅ بات با موفقیت وصله!";
+// 🧠 ارسال پیام به OpenRouter و دریافت پاسخ هوش مصنوعی
+try {
+  const aiResponse = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      model: "gpt-4o-mini",
+      messages: [
+        { role: "system", content: "تو یک دستیار فارسی‌زبان مودب و باهوش هستی." },
+        { role: "user", content: msg.text }
+      ]
+    })
+  });
 
+  const data = await aiResponse.json();
+  const aiReply = data?.choices?.[0]?.message?.content || "❌ پاسخی از هوش مصنوعی دریافت نشد.";
+
+  // ارسال پاسخ هوش مصنوعی به تلگرام
   await fetch(`${BASE_URL}/bot${TELEGRAM_TOKEN}/sendMessage`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       chat_id: msg.chat.id,
-      text: replyText,
-    }),
+      text: aiReply
+    })
   });
 
+} catch (err) {
+  console.error("AI Error:", err);
+}
   res.sendStatus(200);
 });
 

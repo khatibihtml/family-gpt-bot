@@ -7,12 +7,12 @@ app.use(express.json());
 // 🔑 تنظیمات اصلی
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
 const BASE_URL = "https://api.telegram.org";
-const WEBHOOK_URL = "https://falkon.tfsh.onrender.com";
+const WEBHOOK_URL = process.env.WEBHOOK_URL || "https://falkon-tfsh.onrender.com"; // ⚠ اصلاح‌شده
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
 // 📩 دریافت پیام از تلگرام
 app.post(`/bot${TELEGRAM_TOKEN}`, async (req, res) => {
-  const msg = req.body.message;
+  const msg = req.body?.message || req.body?.edited_message; // ⚠ برای گروه‌ها هم کار کنه
   if (!msg || !msg.text) return res.sendStatus(200);
 
   console.log("📩 پیام از تلگرام:", msg.text);

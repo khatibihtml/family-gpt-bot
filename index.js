@@ -19,7 +19,7 @@ app.use(bodyParser.json());
 
 // ساخت و تنظیم وبهوک
 const bot = new TelegramBot(TELEGRAM_TOKEN, { webHook: true });
-const webhookUrl = ${BASE_URL.replace(/\/+$/, "")}/${TELEGRAM_TOKEN};
+const webhookUrl = `${BASE_URL.replace(/\/+$/, "")}/${TELEGRAM_TOKEN}`;
 const setHook = await bot.setWebHook(webhookUrl);
 console.log("🌍 Webhook:", webhookUrl, " -> ", setHook);
 

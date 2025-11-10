@@ -6,7 +6,7 @@ app.use(express.json());
 
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
 const BASE_URL = "https://api.telegram.org";
-const WEBHOOK_URL = "https://falkon-tfsh.onrender.com";
+const WEBHOOK_URL = "https://falkon.onrender.com";
 
 // ✅ دریافت پیام از تلگرام
 app.post(`/bot${TELEGRAM_TOKEN}`, async (req, res) => {

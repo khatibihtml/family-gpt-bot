@@ -12,7 +12,7 @@ const webhookUrl = `${BASE_URL}/${TELEGRAM_TOKEN}`;
 
 // تنظیم وبهوک
 const setWebhook = async () => {
-  const res = await fetch(https://api.telegram.org/bot${TELEGRAM_TOKEN}/setWebhook?url=${webhookUrl});
+  const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/setWebhook?url=${webhookUrl}`);
   const data = await res.json();
   console.log("Webhook setup:", data);
 };

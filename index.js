@@ -55,7 +55,7 @@ app.post(`/bot${TELEGRAM_TOKEN}`, async (req, res) => {
 });
 
 // 🚀 راه‌اندازی وبهوک
-app.listen(8443, async () => {
+app.listen(443, async () => {
   console.log("🚀 Server running on port 8443");
   try {
     const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/setWebhook?url=${WEBHOOK_URL}/bot${TELEGRAM_TOKEN}`);

@@ -6,8 +6,8 @@ app.use(express.json());
 
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
-const BASE_URL = `https://api.telegram.org/bot${TELEGRAM_TOKEN}`;
-const WEBHOOK_URL = `https://falkon-***.onrender.com/${TELEGRAM_TOKEN}`;
+const BASE_URL = "https://api.telegram.org";
+const WEBHOOK_URL = 'https://falkon-itsh.onrender.com"
 
 app.post(`/${TELEGRAM_TOKEN}`, async (req, res) => {
   const message = req.body.message;
@@ -52,7 +52,7 @@ app.listen(8443, async () => {
   console.log("🚀 Server running on port 8443");
 
   try {
-    const res = await fetch(`${BASE_URL}/setWebhook?url=${WEBHOOK_URL}`);
+    const res = await fetch(`${BASE_URL}/bot${TELEGRAM_TOKEN}/setWebhook?url=${WEBHOOK_URL}/bot${TELEGRAM_TOKEN}`);
     const data = await res.json();
     console.log("Webhook setup:", data);
   } catch (err) {

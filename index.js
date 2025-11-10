@@ -7,7 +7,7 @@ app.use(express.json());
 // 🔑 تنظیمات اصلی
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
 const BASE_URL = "https://api.telegram.org";
-const WEBHOOK_URL = "https://falkon.onrender.com";
+const WEBHOOK_URL = "https://falkon.tfsh.onrender.com";
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
 // 📩 دریافت پیام از تلگرام

@@ -34,9 +34,7 @@ app.post(`/bot${TELEGRAM_TOKEN}`, async (req, res) => {
 app.listen(8443, async () => {
   console.log("🚀 Server running on port 8443");
   try {
-    const res = await fetch(
-      `${BASE_URL}/bot${TELEGRAM_TOKEN}/setWebhook?url=${WEBHOOK_URL}/bot${TELEGRAM_TOKEN}`
-    );
+    const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/setWebhook?url=${WEBHOOK_URL}`);
     const data = await res.json();
     console.log("Webhook setup:", data);
   } catch (err) {

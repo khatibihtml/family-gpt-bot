@@ -13,12 +13,12 @@ app.post(`/bot${TELEGRAM_TOKEN}`, async (req, res) => {
   if (!message || !message.text) {
     return res.sendStatus(200);
   }
+   const userText = message.text;
+  res.sendstatus(200);
+});
 bot.on("message", (msg) => {
   console.log("📩 Message received:", msg.text);
   bot.sendMessage(msg.chat.id, "✅ پیام‌ات رسید!");
-});
-  const userText = message.text;
-
   try {
     const aiResponse = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",

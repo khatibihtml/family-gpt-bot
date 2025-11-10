@@ -1,7 +1,7 @@
 import express from "express";
 import fetch from "node-fetch";
 
-const app = express();
+const app = express(); 
 app.use(express.json());
 
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;

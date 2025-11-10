@@ -54,15 +54,20 @@ app.post(`/bot${TELEGRAM_TOKEN}`, async (req, res) => {
   }
 });
 
-// 🚀 راه‌اندازی وبهوک
+// ✅ راه‌اندازی وبهوک مخصوص Render
 const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, async () => {
-  console.log(🚀 Server running on port ${PORT});
+  console.log(`🚀 Server running on port ${PORT}`);
+
   try {
-    const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/setWebhook?url=${WEBHOOK_URL}/bot${TELEGRAM_TOKEN}`);
+    const webhookUrl = `${WEBHOOK_URL}/bot${TELEGRAM_TOKEN}`;
+    console.log("🔗 Setting webhook to:", webhookUrl);
+
+    const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/setWebhook?url=${webhookUrl}`);
     const data = await res.json();
-    console.log("Webhook setup:", data);
+    console.log("📡 Webhook setup result:", data);
   } catch (err) {
-    console.error("Webhook error:", err);
+    console.error("❌ Webhook error:", err);
   }
 });

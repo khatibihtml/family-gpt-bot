@@ -46,6 +46,7 @@ bot.on("message", async (msg) => {
 
 // ---------------------- سرور اکسپرس ----------------------
 app.post(`/bot${TELEGRAM_TOKEN}`, (req, res) => {
+  console.log("📥 Telegram webhook called:", req.body);
   bot.processUpdate(req.body);
   res.sendStatus(200);
 });

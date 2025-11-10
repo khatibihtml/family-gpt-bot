@@ -47,20 +47,20 @@ bot.on("message", async (msg) => {
 
     await bot.sendChatAction(msg.chat.id, "typing");
 
-    const r = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": Bearer ${OPENROUTER_API_KEY},
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [
-          { role: "system", content: "تو یک دستیار فارسی‌زبان مودب و باهوش هستی." },
-          { role: "user", content: text }
-        ]
-      })
-    });
+   const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+  method: "POST",
+  headers: {
+    "Authorization": Bearer ${OPENROUTER_API_KEY},
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    model: "gpt-4o-mini",
+    messages: [
+      { role: "system", content: "تو یک دستیار فارسی‌زبان مودب و باهوش هستی." },
+      { role: "user", content: userText },
+    ],
+  }),
+});
 
     if (!r.ok) throw new Error(OpenRouter error: ${r.status});
     const data = await r.json();

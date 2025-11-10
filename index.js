@@ -26,12 +26,16 @@ bot.on("message", (msg) => {
       body: JSON.stringify({
         model: "gpt-3.5-turbo",
         messages: [{ role: "user", content: userText }]
-      })
+      }),
     });
 
     const data = await aiResponse.json();
-    const reply = data?.choices?.[0]?.message?.content || "پاسخی دریافت نشد.";
-
+    const aireply = data.choices?.[0]?.message?.content || "پاسخی دریافت نشد.";
+    bot.sendMessage(msg.chat.id,aiReply);
+  } vatch(err){cosole.error("AI error:",err);
+    bot,sendMessage(msg.chat.id,);
+              }
+});
     await fetch(`${BASE_URL}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

@@ -19,7 +19,7 @@ const setWebhook = async () => {
 setWebhook();
 
 // هندل پیام‌ها
-app.post(/${TELEGRAM_TOKEN}, async (req, res) => {
+app.post(`/${TELEGRAM_TOKEN}`, async (req, res) => {
   const message = req.body.message;
   if (!message || !message.text) return res.sendStatus(200);
 

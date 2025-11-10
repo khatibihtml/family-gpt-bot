@@ -1,89 +1,64 @@
 import express from "express";
-import fetch from "node-fetch";   // این از قبل هست
+import fetch from "node-fetch";
 
-// ---- OpenRouter config (اضافه کن) ----
-const OPENROUTER_API_KEY = "اینجا-کلید-OpenRouter-خودت";
-const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
-// --------------------------------------
 const app = express();
 app.use(express.json());
 
+// 🔑 تنظیمات اصلی
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
 const BASE_URL = "https://api.telegram.org";
 const WEBHOOK_URL = "https://falkon.onrender.com";
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
-// ✅ دریافت پیام از تلگرام
+// 📩 دریافت پیام از تلگرام
 app.post(`/bot${TELEGRAM_TOKEN}`, async (req, res) => {
   const msg = req.body.message;
   if (!msg || !msg.text) return res.sendStatus(200);
 
   console.log("📩 پیام از تلگرام:", msg.text);
 
-// 🧠 ارسال پیام به OpenRouter و دریافت پاسخ هوش مصنوعی
+  try {
+    // 🧠 ارسال پیام به OpenRouter و دریافت پاسخ
+    const aiResponse = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [
+          { role: "system", content: "تو یک دستیار فارسی‌زبان مودب و باهوش هستی." },
+          { role: "user", content: msg.text }
+        ]
+      })
+    });
 
+    const data = await aiResponse.json();
+    const aiReply = data?.choices?.[0]?.message?.content || "❌ پاسخی از هوش مصنوعی دریافت نشد.";
 
-  body: JSON.stringify({
-      model: "gpt-4o-mini",
-      messages: [
-        { role: "system", content: "You are a helpful Persian assistant." },
-        { role: "user", content: msg.text },
-      ],
-    }),
-  const aiData = await aiResponse.json();
-  const replyText = aiData.choices?.[0]?.message?.content || "❌ خطا در پاسخ از OpenRouter.";
+    // ✉ ارسال پاسخ به تلگرام
+    await fetch(`${BASE_URL}/bot${TELEGRAM_TOKEN}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: msg.chat.id,
+        text: aiReply
+      })
+    });
 
-  await fetch(`${BASE_URL}/bot${TELEGRAM_TOKEN}/sendMessage`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      chat_id: msg.chat.id,
-      text: replyText,
-    }),
-  });
-
-  res.sendStatus(200);
- catch (err) {
-  console.error("AI error:", err);
-  res.sendStatus(500);
-}
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      model: "gpt-4o-mini",
-      messages: [
-        { role: "system", content: "تو یک دستیار فارسی‌زبان مودب و باهوش هستی." },
-        { role: "user", content: msg.text }
-      ]
-    })
-  });
-
-  const data = await aiResponse.json();
-  const aiReply = data?.choices?.[0]?.message?.content || "❌ پاسخی از هوش مصنوعی دریافت نشد.";
-
-  // ارسال پاسخ هوش مصنوعی به تلگرام
-  await fetch(`${BASE_URL}/bot${TELEGRAM_TOKEN}/sendMessage`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      chat_id: msg.chat.id,
-      text: aiReply
-    })
-  });
-
-} catch (err) {
-  console.error("AI Error:", err);
-}
-  res.sendStatus(200);
+    res.sendStatus(200);
+  } catch (err) {
+    console.error("AI Error:", err);
+    res.sendStatus(500);
+  }
 });
 
-// ✅ راه‌اندازی وبهوک
+// 🚀 راه‌اندازی وبهوک
 app.listen(8443, async () => {
   console.log("🚀 Server running on port 8443");
   try {
-    const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/setWebhook?url=${WEBHOOK_URL}bot${TELEGRAM_TOKEN}`);
+    const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/setWebhook?url=${WEBHOOK_URL}/bot${TELEGRAM_TOKEN}`);
     const data = await res.json();
     console.log("Webhook setup:", data);
   } catch (err) {

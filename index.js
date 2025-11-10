@@ -1,6 +1,10 @@
 import express from "express";
-import fetch from "node-fetch";
+import fetch from "node-fetch";   // این از قبل هست
 
+// ---- OpenRouter config (اضافه کن) ----
+const OPENROUTER_API_KEY = "اینجا-کلید-OpenRouter-خودت";
+const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
+// --------------------------------------
 const app = express();
 app.use(express.json());
 
@@ -16,8 +20,32 @@ app.post(`/bot${TELEGRAM_TOKEN}`, async (req, res) => {
   console.log("📩 پیام از تلگرام:", msg.text);
 
 // 🧠 ارسال پیام به OpenRouter و دریافت پاسخ هوش مصنوعی
-try {
-  const aiResponse = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+
+
+  body: JSON.stringify({
+      model: "gpt-4o-mini",
+      messages: [
+        { role: "system", content: "You are a helpful Persian assistant." },
+        { role: "user", content: msg.text },
+      ],
+    }),
+  const aiData = await aiResponse.json();
+  const replyText = aiData.choices?.[0]?.message?.content || "❌ خطا در پاسخ از OpenRouter.";
+
+  await fetch(`${BASE_URL}/bot${TELEGRAM_TOKEN}/sendMessage`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      chat_id: msg.chat.id,
+      text: replyText,
+    }),
+  });
+
+  res.sendStatus(200);
+ catch (err) {
+  console.error("AI error:", err);
+  res.sendStatus(500);
+}
     method: "POST",
     headers: {
       "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,

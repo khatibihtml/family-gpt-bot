@@ -10,11 +10,8 @@ const WEBHOOK_URL = "https://falkon-itsh.onrender.com"
 
 app.post(`/bot${TELEGRAM_TOKEN}`, async (req, res) => {
   const message = req.body.message;
-  if (!message || !message.text) {
+  if (!message || !message.text) 
     return res.sendStatus(200);
-  }
-   const userText = message.text;
-  res.sendstatus(200);
 });
 bot.on("message", (msg) => {
   console.log("📩 Message received:", msg.text);

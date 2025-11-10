@@ -1,8 +1,8 @@
 // index.js
-import express from "express";
-import bodyParser from "body-parser";
-import fetch from "node-fetch";
-import TelegramBot from "node-telegram-bot-api";
+const express = require("express");
+const bodyParser = require("body-parser");
+const fetch = require("node-fetch");
+const TelegramBot = require("node-telegram-bot-api");
 
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;

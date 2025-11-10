@@ -44,13 +44,10 @@ bot.on("message", (msg) => {
         text: reply
       })
     });
-  } catch (err) {
+   catch (err) {
     console.error("Error:", err);
   }
-
   res.sendStatus(200);
-});
-
 app.listen(8443, async () => {
   console.log("🚀 Server running on port 8443");
 

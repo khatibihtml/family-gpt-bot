@@ -50,7 +50,8 @@ app.post(`/bot${TELEGRAM_TOKEN}`, (req, res) => {
   res.sendStatus(200);
 });
 
-app.listen(8443, async () => {
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, async () => {
   console.log("🚀 Server running on port 8443");
 
   try {
